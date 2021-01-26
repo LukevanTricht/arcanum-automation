@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         aardvark arcanum auto - Lukes fork(Shokkuno Version)
-// @version      1717
+// @version      1718
 // @author       aardvark, Linspatz, Harrygiel, LukevanTricht
 // @description  Automates casting buffs, buying gems making types gems, making lore. Adds sell junk/dupe item buttons. Must open the main tab and the spells tab once to work.
 // @downloadURL  https://github.com/LukevanTricht/arcanum-automation/raw/shokkuno-latest/automate.user.js
@@ -10,7 +10,6 @@
 
 var tc_arcanum_ver = 10000; // used to allow backwards compatibility
 
-var tc_debug = false; // set to true to see debug messages
 
 var tc_suspend = false; // set this to true in console to suspend all auto functions
 
@@ -132,8 +131,9 @@ function tc_populate_spells() {
   // It can be confusing that autocast doesn't do anything until the spells tab is visited,
   // so switch to it on startup and grab anything there.
   if (tc_checked_spells == 0) {
-    if (!tc_settab("spells")) // this might fail if spells not available yet
+    if (!tc_settab("spells")) { // this might fail if spells not available yet
       tc_checked_spells++;
+    }
     tc_checked_spells++;
     // wait for tab to be displayed
     return;
@@ -193,18 +193,18 @@ function tc_populate_actions() {
 
   // Grab all Tasks
   for (let qs of document.querySelectorAll(".main-tasks .task-list .task-btn:not(.locked):not(.disabled):not(.runnable)")) {
-    var key = qs.innerHTML.toLowerCase();
-    if (!tc_actions.get(key)) {
-      tc_actions.set(key, qs);
+    var task_key = qs.innerHTML.toLowerCase();
+    if (!tc_actions.get(task_key)) {
+      tc_actions.set(task_key, qs);
       if (tc_debug) console.log("Action stored: " + qs.innerHTML);
     }
   }
 
   // Grab all Upgrades
   for (let qs of document.querySelectorAll(".main-tasks .upgrade-list .task-btn:not(.locked):not(.disabled):not(.runnable)")) {
-    var key = qs.innerHTML.toLowerCase();
-    if (!tc_actions.get(key)) {
-      tc_actions.set(key, qs);
+    var upgrade_key = qs.innerHTML.toLowerCase();
+    if (!tc_actions.get(upgrade_key)) {
+      tc_actions.set(upgrade_key, qs);
       if (tc_debug) console.log("Action stored: " + qs.innerHTML);
     }
   }
@@ -255,8 +255,9 @@ function tc_check_running_adv() {
 function tc_gettab() {
   for (let tab of document.querySelectorAll("div.menu-items div.menu-item span")) {
     var s = tab.innerHTML;
-    if (!/<\/u>/.test(s))
+    if (!/<\/u>/.test(s)){
       return s.slice(1, -1); // strip off leading and trailing space
+    }
   }
 }
 
@@ -383,61 +384,75 @@ function tc_automate() {
 
   tc_populate_resources();
 
-  if (tc_check_resource("herbs", 1) && !tc_check_resource("gold", 1))
+  if (tc_check_resource("herbs", 1) && !tc_check_resource("gold", 1)){
     var sellamount = tc_resources.get("herbs")[1] / 2;
-  for (let i = 0; i < sellamount; ++i)
+  }
+  for (let i = 0; i < sellamount; ++i){
     tc_click_action("sell herbs");
+  }
 
-  if (tc_check_resource("research", 1) && !tc_check_resource("scrolls", 1) && tc_check_bars("mana", .75))
+  if (tc_check_resource("research", 1) && !tc_check_resource("scrolls", 1) && tc_check_bars("mana", .75)){
     tc_click_action("scribe scroll");
-  if (!tc_check_resource("codices", 1) && tc_check_resource("scrolls", 1) && tc_check_bars("mana", .5))
+  }
+  if (!tc_check_resource("codices", 1) && tc_check_resource("scrolls", 1) && tc_check_bars("mana", .5)){
     tc_click_action("bind codex");
+  }
   // Selling scrolls can be useful late game when we're automatically generating them,
   // and buying scrolls is useful at the start,
   // but there was a problem here when scrolls = max-1 and we bought a scroll, then scrolls were maxed but money wasn't
   // so next tick we'd sell the scroll and so we'd never be able to max either.
-  if (tc_resources.get("gold")[0] < tc_resources.get("gold")[1] - 20 && tc_check_resource("scrolls", 1))
+  if (tc_resources.get("gold")[0] < tc_resources.get("gold")[1] - 20 && tc_check_resource("scrolls", 1)){
     tc_click_action("sell scroll");
-  else if (tc_check_resource("gold", 1) && !tc_check_resource("scrolls", 1))
+  }
+  else if (tc_check_resource("gold", 1) && !tc_check_resource("scrolls", 1)){
     tc_click_action("buy scroll"); // could fail if scribe above maxed them
-
+  }
   // If money maxed, buy gem
-  if (tc_check_resource("gold", 1) && !tc_check_resource("gems", 1))
+  if (tc_check_resource("gold", 1) && !tc_check_resource("gems", 1)){
     tc_click_action("purchase gem");
-
+  }
   // If gems maxed, try making some different ones
   if (tc_check_resource("gems", 1)) {
     var bought_gem = false;
     for (var gem in tc_gems) { // try to make one of each
       if (!tc_check_resource(gem, 1)) {
         if (tc_debug) console.log("not maxed " + gem + " calling " + tc_gems[gem]);
-        if (tc_click_action(tc_gems[gem]))
+        if (tc_click_action(tc_gems[gem])){
           bought_gem = true;
+        }
       }
     }
     // or buy the gem box
-    if (!bought_gem)
+    if (!bought_gem){
       tc_click_action("gem box");
+    }
   }
 
   // Sublimate lore
   if (tc_use_sublimate && tc_check_resource("codices", 1)) {
-    if (tc_click_action("sublimate lore"))
-      for (let qs of document.querySelectorAll(".popup"))
+    if (tc_click_action("sublimate lore")){
+      for (let qs of document.querySelectorAll(".popup")){
         // will get some errors in console here as popup matches config screen
-        if (qs.children[0].children[0] && qs.children[0].children[0].innerHTML == "sublimate lore")
+        if (qs.children[0].children[0] && qs.children[0].children[0].innerHTML == "sublimate lore"){
           qs.children[1].children[0].click();
+        }
+      }
+    }
   }
 
   //Gather herbs if stamina full and herbs are not
-  if (tc_auto_gather && tc_check_bars("stamina", 1) && !tc_check_resource("herbs", 1))
-    for (let i = 0; i < 10; ++i)
+  if (tc_auto_gather && tc_check_bars("stamina", 1) && !tc_check_resource("herbs", 1)){
+    for (let i = 0; i < 10; ++i){
       tc_click_action("gather herbs");
+    }
+  }
 
   //Grind out some max reserach if max mana
-  if (tc_auto_grind && tc_check_bars("mana", 1))
-    for (let i = 0; i < 20; ++i)
+  if (tc_auto_grind && tc_check_bars("mana", 1)){
+    for (let i = 0; i < 20; ++i){
       tc_click_action("grind");
+    }
+  }
 }
 
 function tc_autoadv() {
@@ -473,14 +488,16 @@ function tc_selljunk() {
   // "silk ", "cotton ", "stone ", "leather ", "^wood ", "bone ", "bronze ", "iron ", "^steel ", "quicksteel ", "mithril ", "ebonwood ", "ethereal ", "adamant "
 
   function checkmatch(m) {
-    for (let i of sell_match)
+    for (let i of sell_match){
       if (RegExp(i).test(m)) return true;
+    }
     return false;
   }
 
   var itemlocation = document.querySelectorAll(".adventure .raid-bottom .inv .item-table tr")
-  if (itemlocation.length == 0)
+  if (itemlocation.length == 0){
     itemlocation = document.querySelectorAll(".adventure .raid-bottom .inv table tr")
+  }
 
   for (let row of itemlocation) {
     // table has 4 columns: name + 3 buttons: Equip, Take, Sell
@@ -500,8 +517,9 @@ function tc_selldups() {
 
   // Build a map of item -> qty
   var itemlocation = document.querySelectorAll(".adventure .raid-bottom .inv .item-table tr")
-  if (itemlocation.length == 0)
+  if (itemlocation.length == 0){
     itemlocation = document.querySelectorAll(".adventure .raid-bottom .inv table tr")
+  }
 
   for (let row of itemlocation) {
     // table has 4 columns: name + 3 buttons: Equip, Take, Sell
@@ -564,14 +582,18 @@ function tc_lootfilter() {
 
   if (filter.length == 0) {
     // Clear all hidden
-    for (let row of document.querySelectorAll(".adventure .raid-bottom .inv table tr"))
+    for (let row of document.querySelectorAll(".adventure .raid-bottom .inv table tr")){
       row.style.display = "";
+    }
   } else {
-    for (let row of document.querySelectorAll(".adventure .raid-bottom .inv table tr"))
-      if (row.children[0].innerText.indexOf(filter) != -1)
+    for (let row of document.querySelectorAll(".adventure .raid-bottom .inv table tr")){
+      if (row.children[0].innerText.indexOf(filter) != -1){
         row.style.display = "";
-      else
+      }
+      else{
         row.style.display = "none";
+      }
+    }
   }
 }
 
@@ -581,8 +603,9 @@ function tc_sellsetup() {
   if (document.getElementById("selldups")) return;
 
   var sellall = document.querySelectorAll(".adventure .raid-bottom .inv span.top span button");
-  if (sellall.length = 0)
+  if (sellall.length = 0){
     sellall = document.querySelectorAll(".adventure .raid-bottom .inv div.flex-row button");
+  }
   if (sellall.length == 0) return; // nothing to sell on tab yet
   sellall = sellall[0];
 
@@ -637,8 +660,9 @@ function tc_advsetup() {
         tc_auto_adventure = qs.firstElementChild.firstElementChild.innerText;
         tc_click_adv(tc_auto_adventure)
       });
-      if (tc_auto_adventure == qs.children[0].children[0].innerText)
+      if (tc_auto_adventure == qs.children[0].children[0].innerText){
         seldungeon.setAttribute("style", "color:#1B5E20");
+      }
       qs.appendChild(seldungeon);
     }
   }
@@ -647,8 +671,8 @@ function tc_advsetup() {
 function tc_get_auto_earn() {
   // Find which action we can do
   var act = tc_auto_earn_gold_override.trim();
-  if (tc_auto_earn_gold_override.trim()) {
-    var a = tc_actions.get(act);
+  if (act) {
+    var action = tc_actions.get(act);
     if (a && !a.disabled) {
       return act;
     }
@@ -801,8 +825,8 @@ async function tc_autofocus() {
     // 10 mana required for compile tome, 3 for Bind Codex, 1 for Scribe Scroll
     var min = max < 15 ? max - 1 : 14;
     if (amt >= min) {
-      for (let i = 10 * (amt - min); i > 0; i--)
         tc_focus.click();
+        if (tc_debug) console.log("Clicking: Focus");
     }
     return;
   }
