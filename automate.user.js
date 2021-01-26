@@ -1,9 +1,9 @@
 // ==UserScript==
-// @name         aardvark arcanum auto - Harrygiel's fork
-// @version      1716
-// @author       aardvark, Linspatz, Harrygiel
+// @name         aardvark arcanum auto - Lukes fork(Shokkuno Version)
+// @version      1717
+// @author       aardvark, Linspatz, Harrygiel, LukevanTricht
 // @description  Automates casting buffs, buying gems making types gems, making lore. Adds sell junk/dupe item buttons. Must open the main tab and the spells tab once to work.
-// @downloadURL  https://github.com/LukevanTricht/arcanum-automation/raw/master/automate.user.js
+// @downloadURL  https://github.com/LukevanTricht/arcanum-automation/raw/shokkuno-latest/automate.user.js
 // @match        http://www.lerpinglemur.com/arcanum/*
 // @match        https://www.lerpinglemur.com/arcanum/*
 // @match        http://game312933.konggames.com/gamez/0031/2933/*
