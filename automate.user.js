@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         aardvark arcanum auto - Lukes fork(Shokkuno Version)
-// @version      1718
+// @version      1719
 // @author       aardvark, Linspatz, Harrygiel, LukevanTricht
 // @description  Automates casting buffs, buying gems making types gems, making lore. Adds sell junk/dupe item buttons. Must open the main tab and the spells tab once to work.
 // @downloadURL  https://github.com/LukevanTricht/arcanum-automation/raw/shokkuno-latest/automate.user.js
@@ -10,6 +10,7 @@
 
 var tc_arcanum_ver = 10000; // used to allow backwards compatibility
 
+var tc_debug = false; // set to true to see debug messages
 
 var tc_suspend = false; // set this to true in console to suspend all auto functions
 
@@ -819,17 +820,21 @@ async function tc_autofocus() {
   var amt = tc_bars.get("mana")[0];
   var max = tc_bars.get("mana")[1];
 
-  if (tc_gettab() != "skills" || !tc_auto_focus_aggressive) {
+  if (tc_gettab() == "main") {
     tc_skill_saved = tc_skill_last = "";
 
     // 10 mana required for compile tome, 3 for Bind Codex, 1 for Scribe Scroll
     var min = max < 15 ? max - 1 : 14;
     if (amt >= min) {
-        tc_focus.click();
-        if (tc_debug) console.log("Clicking: Focus");
+      for (let i = 10 * (amt-min); i > 0; i--){
+        var success = tc_click_action("focus");
+        if (tc_debug && !success) console.log("Clicking: Focus Failed");
+      }
     }
     return;
   }
+
+  if (tc_gettab() != "skills" || !tc_auto_focus_aggressive) return;
 
   // We're on the skills tab - try to: repeat {use up all mana with focusing, then rest to restore mana }
   // Note that if we switch tabs while resting, we won't restart learning skill when finished resting.
