@@ -132,32 +132,32 @@ function tc_populate_spells() {
   // It can be confusing that autocast doesn't do anything until the spells tab is visited,
   // so switch to it on startup and grab anything there.
   if (tc_checked_spells == 0) {
-	if (!tc_settab("spells")) // this might fail if spells not available yet
-	  tc_checked_spells++;
-	tc_checked_spells++;
-	// wait for tab to be displayed
-	return;
+    if (!tc_settab("spells")) // this might fail if spells not available yet
+      tc_checked_spells++;
+    tc_checked_spells++;
+    // wait for tab to be displayed
+    return;
   }
 
   if (tc_gettab() !== "spells") return;
 
   for (let qs of document.querySelectorAll(".spells .bottom .spellbook table tr")) {
-	if (qs.childElementCount == 3) {
-	  var spell = qs.children[1].innerHTML.toLowerCase();
-	  if (!tc_spells.get(spell) && !qs.children[2].firstChild.disabled) {
-		// Don't save spells we haven't learnt yet.
-		if (qs.children[2].firstChild.innerText.toLowerCase() == "cast") {
-		  tc_spells.set(spell, qs.children[2].firstChild);
-		  if (tc_debug) console.log("Saved spell: " + spell);
-		}
-	  }
-	}
+    if (qs.childElementCount == 3) {
+      var spell = qs.children[1].innerHTML.toLowerCase();
+      if (!tc_spells.get(spell) && !qs.children[2].firstChild.disabled) {
+        // Don't save spells we haven't learnt yet.
+        if (qs.children[2].firstChild.innerText.toLowerCase() == "cast") {
+          tc_spells.set(spell, qs.children[2].firstChild);
+          if (tc_debug) console.log("Saved spell: " + spell);
+        }
+      }
+    }
   }
 
   if (tc_checked_spells == 1) {
-	// switch tab succeeded and we've grabbed the spells, so switch back to main
-	tc_settab("main");
-	tc_checked_spells++;
+    // switch tab succeeded and we've grabbed the spells, so switch back to main
+    tc_settab("main");
+    tc_checked_spells++;
   }
 }
 
@@ -165,25 +165,25 @@ function tc_populate_spells() {
 function tc_populate_resources() {
   var resource_groups = document.querySelectorAll("div.game-main div.res-list div.res-group")
   for (let rg of resource_groups) {
-	var resources = rg.querySelectorAll("div.rsrc")
-	for (let n of resources) {
-	  var name = n.firstElementChild.innerHTML.toLowerCase();
-	  var vals = n.lastElementChild.innerHTML.split("/");
-	  var val0 = parseInt(vals[0]);
-	  var val1 = parseInt(vals[1]);
-	  tc_resources.set(name, [val0, val1]);
-	}
+    var resources = rg.querySelectorAll("div.rsrc")
+    for (let n of resources) {
+      var name = n.firstElementChild.innerHTML.toLowerCase();
+      var vals = n.lastElementChild.innerHTML.split("/");
+      var val0 = parseInt(vals[0]);
+      var val1 = parseInt(vals[1]);
+      tc_resources.set(name, [val0, val1]);
+    }
   }
 }
 
 // Call every second to update mana bars
 function tc_populate_bars() {
   for (let n of document.querySelectorAll("div.game-main div.vitals div.statbars div.statbar")) {
-	var name = n.firstElementChild.innerHTML.toLowerCase();
-	var vals = n.querySelector("span.bar-text").innerText.split("/");
-	var val0 = parseFloat(vals[0]);
-	var val1 = parseFloat(vals[1]);
-	tc_bars.set(name, [val0, val1]);
+    var name = n.firstElementChild.innerHTML.toLowerCase();
+    var vals = n.querySelector("span.bar-text").innerText.split("/");
+    var val0 = parseFloat(vals[0]);
+    var val1 = parseFloat(vals[1]);
+    tc_bars.set(name, [val0, val1]);
   }
 }
 
@@ -193,20 +193,20 @@ function tc_populate_actions() {
 
   // Grab all Tasks
   for (let qs of document.querySelectorAll(".main-tasks .task-list .task-btn:not(.locked):not(.disabled):not(.runnable)")) {
-	var key = qs.innerHTML.toLowerCase();
-	if (!tc_actions.get(key)) {
-	  tc_actions.set(key, qs);
-	  if (tc_debug) console.log("Action stored: " + qs.innerHTML);
-	}
+    var key = qs.innerHTML.toLowerCase();
+    if (!tc_actions.get(key)) {
+      tc_actions.set(key, qs);
+      if (tc_debug) console.log("Action stored: " + qs.innerHTML);
+    }
   }
 
   // Grab all Upgrades
   for (let qs of document.querySelectorAll(".main-tasks .upgrade-list .task-btn:not(.locked):not(.disabled):not(.runnable)")) {
-	var key = qs.innerHTML.toLowerCase();
-	if (!tc_actions.get(key)) {
-	  tc_actions.set(key, qs);
-	  if (tc_debug) console.log("Action stored: " + qs.innerHTML);
-	}
+    var key = qs.innerHTML.toLowerCase();
+    if (!tc_actions.get(key)) {
+      tc_actions.set(key, qs);
+      if (tc_debug) console.log("Action stored: " + qs.innerHTML);
+    }
   }
 }
 
@@ -216,11 +216,11 @@ function tc_populate_adventures() {
 
   //Map is set up as: name, [progress, needed, button]
   for (let qs of document.querySelectorAll("div.game-main div.locales div.locale")) {
-	if (!qs.children[0].children[0].children[1].disabled) {
-	  var name = qs.children[0].children[0].children[0].innerText // name of dungeon
-	  var vals = qs.children[1].innerText.split("/")
-	  tc_adventures.set(name, [vals[0], vals[1], qs.children[0].children[0].children[1]]);
-	}
+    if (!qs.children[0].children[0].children[1].disabled) {
+      var name = qs.children[0].children[0].children[0].innerText // name of dungeon
+      var vals = qs.children[1].innerText.split("/")
+      tc_adventures.set(name, [vals[0], vals[1], qs.children[0].children[0].children[1]]);
+    }
   }
 }
 
@@ -228,8 +228,8 @@ function tc_populate_adventures() {
 function tc_populate_running() {
   tc_running.clear();
   for (let qs of document.querySelectorAll("div.running div")) {
-	var key = qs.lastElementChild.innerHTML.toLowerCase();
-	tc_running.set(key, qs.firstChild);
+    var key = qs.lastElementChild.innerHTML.toLowerCase();
+    tc_running.set(key, qs.firstChild);
   }
 }
 
@@ -246,7 +246,7 @@ function tc_check_bars(bars, percent) {
 // Check if you are in an adventure
 function tc_check_running_adv() {
   for (let qs of tc_running.keys()) {
-	if (qs.split(/⚔|🎃|🌳|📖/).length == 2) return true;
+    if (qs.split(/⚔|🎃|🌳|📖/).length == 2) return true;
   }
   return false;
 }
@@ -254,19 +254,19 @@ function tc_check_running_adv() {
 // Return name of current tab
 function tc_gettab() {
   for (let tab of document.querySelectorAll("div.menu-items div.menu-item span")) {
-	var s = tab.innerHTML;
-	if (!/<\/u>/.test(s))
-	  return s.slice(1, -1); // strip off leading and trailing space
+    var s = tab.innerHTML;
+    if (!/<\/u>/.test(s))
+      return s.slice(1, -1); // strip off leading and trailing space
   }
 }
 
 // Set current tab to "name", return false if no such tab available.
 function tc_settab(newtab) {
   for (let tab of document.querySelectorAll("div.menu-items div.menu-item span")) {
-	if (tab.innerHTML.indexOf(newtab) != -1) {
-	  tab.click();
-	  return true;
-	}
+    if (tab.innerHTML.indexOf(newtab) != -1) {
+      tab.click();
+      return true;
+    }
   }
   return false; // name not recognised, maybe not unlocked yet
 }
@@ -278,9 +278,9 @@ function tc_click_adv(adventure) {
   if (tc_suspend) return;
 
   if (lcl.disabled) {
-	if (tc_debug) console.log("Adventure '" + adventure + "' was disabled - deleting it");
-	tc_adventures.delete(adventure);
-	return;
+    if (tc_debug) console.log("Adventure '" + adventure + "' was disabled - deleting it");
+    tc_adventures.delete(adventure);
+    return;
   }
 
   if (tc_debug) console.log("Clicking: " + adventure);
@@ -294,9 +294,9 @@ function tc_click_action(action) {
   if (!act) return false;
 
   if (act.disabled) { // not sure how this happens, but seems to prevent action ever being called again
-	if (tc_debug) console.log("Action '" + action + "' was disabled - deleting it");
-	tc_actions.delete(action);
-	return false;
+    if (tc_debug) console.log("Action '" + action + "' was disabled - deleting it");
+    tc_actions.delete(action);
+    return false;
   }
 
   if (tc_debug) console.log("Clicking: " + action);
@@ -310,9 +310,9 @@ function tc_cast_spell(spell) {
   if (!spl) return false;
 
   if (spl.disabled) { // not sure how this happens, but seems to prevent action ever being called again
-	if (tc_debug) console.log("Spell '" + spell + "' was disabled - deleting it");
-	tc_spells.delete(spell);
-	return false;
+    if (tc_debug) console.log("Spell '" + spell + "' was disabled - deleting it");
+    tc_spells.delete(spell);
+    return false;
   }
 
   if (tc_debug) console.log("Casting: " + spell);
@@ -324,19 +324,19 @@ function tc_cast_spell(spell) {
 function iko_autocast() {
   // Stuff for quickslot bar
   for (let qs of document.querySelectorAll(".quickslot")) {
-	// If it doesn't have the text entry box yet then add it.
-	if (!qs.lastElementChild.classList.contains("timeset")) {
-	  var box = document.createElement("input");
-	  box.setAttribute("type", "text");
-	  box.setAttribute("class", "timeset");
-	  box.setAttribute("style", "position:absolute;bottom:0px;left:0px;width:100%;font-weight:bold;opacity:0.75;text-align:center;");
-	  qs.appendChild(box);
-	}
+    // If it doesn't have the text entry box yet then add it.
+    if (!qs.lastElementChild.classList.contains("timeset")) {
+      var box = document.createElement("input");
+      box.setAttribute("type", "text");
+      box.setAttribute("class", "timeset");
+      box.setAttribute("style", "position:absolute;bottom:0px;left:0px;width:100%;font-weight:bold;opacity:0.75;text-align:center;");
+      qs.appendChild(box);
+    }
 
-	var val = parseInt(qs.lastElementChild.value);
-	if (val > 0 && tc_time_offset % val == 0 && qs.firstElementChild.firstElementChild !== null && qs.lastElementChild !== document.activeElement) {
-	  qs.firstElementChild.firstElementChild.click()
-	}
+    var val = parseInt(qs.lastElementChild.value);
+    if (val > 0 && tc_time_offset % val == 0 && qs.firstElementChild.firstElementChild !== null && qs.lastElementChild !== document.activeElement) {
+      qs.firstElementChild.firstElementChild.click()
+    }
   }
 }
 
@@ -368,11 +368,11 @@ function tc_autocast() {
   if (!tc_auto_cast) return;
 
   for (var spell in tc_autospells) {
-	var rpt = tc_autospells[spell];
-	if (tc_time_offset % rpt == 0 && !(tc_skipcast && tc_skip_cast(spell))) {
-	  if (tc_debug) console.log("try casting " + spell);
-	  tc_cast_spell(spell);
-	}
+    var rpt = tc_autospells[spell];
+    if (tc_time_offset % rpt == 0 && !(tc_skipcast && tc_skip_cast(spell))) {
+      if (tc_debug) console.log("try casting " + spell);
+      tc_cast_spell(spell);
+    }
   }
 }
 
@@ -384,60 +384,60 @@ function tc_automate() {
   tc_populate_resources();
 
   if (tc_check_resource("herbs", 1) && !tc_check_resource("gold", 1))
-	var sellamount = tc_resources.get("herbs")[1] / 2;
+    var sellamount = tc_resources.get("herbs")[1] / 2;
   for (let i = 0; i < sellamount; ++i)
-	tc_click_action("sell herbs");
+    tc_click_action("sell herbs");
 
   if (tc_check_resource("research", 1) && !tc_check_resource("scrolls", 1) && tc_check_bars("mana", .75))
-	tc_click_action("scribe scroll");
+    tc_click_action("scribe scroll");
   if (!tc_check_resource("codices", 1) && tc_check_resource("scrolls", 1) && tc_check_bars("mana", .5))
-	tc_click_action("bind codex");
+    tc_click_action("bind codex");
   // Selling scrolls can be useful late game when we're automatically generating them,
   // and buying scrolls is useful at the start,
   // but there was a problem here when scrolls = max-1 and we bought a scroll, then scrolls were maxed but money wasn't
   // so next tick we'd sell the scroll and so we'd never be able to max either.
   if (tc_resources.get("gold")[0] < tc_resources.get("gold")[1] - 20 && tc_check_resource("scrolls", 1))
-	tc_click_action("sell scroll");
+    tc_click_action("sell scroll");
   else if (tc_check_resource("gold", 1) && !tc_check_resource("scrolls", 1))
-	tc_click_action("buy scroll"); // could fail if scribe above maxed them
+    tc_click_action("buy scroll"); // could fail if scribe above maxed them
 
   // If money maxed, buy gem
   if (tc_check_resource("gold", 1) && !tc_check_resource("gems", 1))
-	tc_click_action("purchase gem");
+    tc_click_action("purchase gem");
 
   // If gems maxed, try making some different ones
   if (tc_check_resource("gems", 1)) {
-	var bought_gem = false;
-	for (var gem in tc_gems) { // try to make one of each
-	  if (!tc_check_resource(gem, 1)) {
-		if (tc_debug) console.log("not maxed " + gem + " calling " + tc_gems[gem]);
-		if (tc_click_action(tc_gems[gem]))
-		  bought_gem = true;
-	  }
-	}
-	// or buy the gem box
-	if (!bought_gem)
-	  tc_click_action("gem box");
+    var bought_gem = false;
+    for (var gem in tc_gems) { // try to make one of each
+      if (!tc_check_resource(gem, 1)) {
+        if (tc_debug) console.log("not maxed " + gem + " calling " + tc_gems[gem]);
+        if (tc_click_action(tc_gems[gem]))
+          bought_gem = true;
+      }
+    }
+    // or buy the gem box
+    if (!bought_gem)
+      tc_click_action("gem box");
   }
 
   // Sublimate lore
   if (tc_use_sublimate && tc_check_resource("codices", 1)) {
-	if (tc_click_action("sublimate lore"))
-	  for (let qs of document.querySelectorAll(".popup"))
-		// will get some errors in console here as popup matches config screen
-		if (qs.children[0].children[0] && qs.children[0].children[0].innerHTML == "sublimate lore")
-		  qs.children[1].children[0].click();
+    if (tc_click_action("sublimate lore"))
+      for (let qs of document.querySelectorAll(".popup"))
+        // will get some errors in console here as popup matches config screen
+        if (qs.children[0].children[0] && qs.children[0].children[0].innerHTML == "sublimate lore")
+          qs.children[1].children[0].click();
   }
 
   //Gather herbs if stamina full and herbs are not
   if (tc_auto_gather && tc_check_bars("stamina", 1) && !tc_check_resource("herbs", 1))
-	for (let i = 0; i < 10; ++i)
-	  tc_click_action("gather herbs");
+    for (let i = 0; i < 10; ++i)
+      tc_click_action("gather herbs");
 
   //Grind out some max reserach if max mana
   if (tc_auto_grind && tc_check_bars("mana", 1))
-	for (let i = 0; i < 20; ++i)
-	  tc_click_action("grind");
+    for (let i = 0; i < 20; ++i)
+      tc_click_action("grind");
 }
 
 function tc_autoadv() {
@@ -454,12 +454,12 @@ function tc_autoadv() {
 	}
 */
   if (tc_check_running_adv() == false) {
-	if (tc_adventure_wait_cd <= 0) {
-	  tc_click_adv(tc_auto_adventure);
-	  tc_adventure_wait_cd = tc_adventure_wait; // resets countdown
-	} else {
-	  tc_adventure_wait_cd--;
-	}
+    if (tc_adventure_wait_cd <= 0) {
+      tc_click_adv(tc_auto_adventure);
+      tc_adventure_wait_cd = tc_adventure_wait; // resets countdown
+    } else {
+      tc_adventure_wait_cd--;
+    }
 
   }
 }
@@ -473,24 +473,24 @@ function tc_selljunk() {
   // "silk ", "cotton ", "stone ", "leather ", "^wood ", "bone ", "bronze ", "iron ", "^steel ", "quicksteel ", "mithril ", "ebonwood ", "ethereal ", "adamant "
 
   function checkmatch(m) {
-	for (let i of sell_match)
-	  if (RegExp(i).test(m)) return true;
-	return false;
+    for (let i of sell_match)
+      if (RegExp(i).test(m)) return true;
+    return false;
   }
 
   var itemlocation = document.querySelectorAll(".adventure .raid-bottom .inv .item-table tr")
   if (itemlocation.length == 0)
-	itemlocation = document.querySelectorAll(".adventure .raid-bottom .inv table tr")
+    itemlocation = document.querySelectorAll(".adventure .raid-bottom .inv table tr")
 
   for (let row of itemlocation) {
-	// table has 4 columns: name + 3 buttons: Equip, Take, Sell
-	if (row.children[3].children[0].innerText == "Sell") {
-	  var item = row.children[0].innerText;
-	  if (sell_exact.indexOf(item) != -1 || checkmatch(item)) {
-		if (tc_debug) console.log("Selling: " + item);
-		row.children[3].children[0].click();
-	  }
-	}
+    // table has 4 columns: name + 3 buttons: Equip, Take, Sell
+    if (row.children[3].children[0].innerText == "Sell") {
+      var item = row.children[0].innerText;
+      if (sell_exact.indexOf(item) != -1 || checkmatch(item)) {
+        if (tc_debug) console.log("Selling: " + item);
+        row.children[3].children[0].click();
+      }
+    }
   }
 }
 
@@ -501,57 +501,57 @@ function tc_selldups() {
   // Build a map of item -> qty
   var itemlocation = document.querySelectorAll(".adventure .raid-bottom .inv .item-table tr")
   if (itemlocation.length == 0)
-	itemlocation = document.querySelectorAll(".adventure .raid-bottom .inv table tr")
+    itemlocation = document.querySelectorAll(".adventure .raid-bottom .inv table tr")
 
   for (let row of itemlocation) {
-	// table has 4 columns: name + 3 buttons: Equip, Take, Sell
-	if (row.children[3].children[0].innerText == "Sell") {
-	  var item = row.children[0].innerText;
-	  var qty = items.get(item);
-	  items.set(item, qty ? qty + 1 : 1);
-	}
+    // table has 4 columns: name + 3 buttons: Equip, Take, Sell
+    if (row.children[3].children[0].innerText == "Sell") {
+      var item = row.children[0].innerText;
+      var qty = items.get(item);
+      items.set(item, qty ? qty + 1 : 1);
+    }
   }
 
   // Now iterate over rows, selling items where qty > 1
   for (let row of itemlocation) {
-	// table has 4 columns: name + 3 buttons: Equip, Take, Sell
-	if (row.children[3].children[0].innerText == "Sell") {
-	  var item = row.children[0].innerText;
-	  var qty = items.get(item);
-	  var maxqty = 1;
-	  var itemtype = "";
-	  switch (item.split(" ").pop()) {
-		case "pendant":
-		case "collar":
-		case "amulet":
-		case "necklace":
-		  maxqty = 3;
-		  break;
-		case "band":
-		case "loop":
-		case "ring":
-		  maxqty = 4;
-		  break;
-		case "shortsword":
-		case "club":
-		case "cane":
-		case "knife":
-		case "broomstick":
-		case "dagger":
-		case "axe":
-		case "mace":
-		  maxqty = 2;
-		  break;
-		default:
-		  maxqty = 1
-		  break;
-	  }
-	}
-	if (qty > maxqty) {
-	  if (tc_debug) console.log("Selling: " + item);
-	  row.children[3].children[0].click();
-	  items.set(item, qty - 1);
-	}
+    // table has 4 columns: name + 3 buttons: Equip, Take, Sell
+    if (row.children[3].children[0].innerText == "Sell") {
+      var item = row.children[0].innerText;
+      var qty = items.get(item);
+      var maxqty = 1;
+      var itemtype = "";
+      switch (item.split(" ").pop()) {
+        case "pendant":
+        case "collar":
+        case "amulet":
+        case "necklace":
+          maxqty = 3;
+          break;
+        case "band":
+        case "loop":
+        case "ring":
+          maxqty = 4;
+          break;
+        case "shortsword":
+        case "club":
+        case "cane":
+        case "knife":
+        case "broomstick":
+        case "dagger":
+        case "axe":
+        case "mace":
+          maxqty = 2;
+          break;
+        default:
+          maxqty = 1
+          break;
+      }
+    }
+    if (qty > maxqty) {
+      if (tc_debug) console.log("Selling: " + item);
+      row.children[3].children[0].click();
+      items.set(item, qty - 1);
+    }
   }
 }
 
@@ -563,15 +563,15 @@ function tc_lootfilter() {
   if (tc_debug) console.log("filter: " + filter);
 
   if (filter.length == 0) {
-	// Clear all hidden
-	for (let row of document.querySelectorAll(".adventure .raid-bottom .inv table tr"))
-	  row.style.display = "";
+    // Clear all hidden
+    for (let row of document.querySelectorAll(".adventure .raid-bottom .inv table tr"))
+      row.style.display = "";
   } else {
-	for (let row of document.querySelectorAll(".adventure .raid-bottom .inv table tr"))
-	  if (row.children[0].innerText.indexOf(filter) != -1)
-		row.style.display = "";
-	  else
-		row.style.display = "none";
+    for (let row of document.querySelectorAll(".adventure .raid-bottom .inv table tr"))
+      if (row.children[0].innerText.indexOf(filter) != -1)
+        row.style.display = "";
+      else
+        row.style.display = "none";
   }
 }
 
@@ -582,7 +582,7 @@ function tc_sellsetup() {
 
   var sellall = document.querySelectorAll(".adventure .raid-bottom .inv span.top span button");
   if (sellall.length = 0)
-	sellall = document.querySelectorAll(".adventure .raid-bottom .inv div.flex-row button");
+    sellall = document.querySelectorAll(".adventure .raid-bottom .inv div.flex-row button");
   if (sellall.length == 0) return; // nothing to sell on tab yet
   sellall = sellall[0];
 
@@ -603,14 +603,14 @@ function tc_sellsetup() {
 
   // Newest versions of the game come with its own loot filter. This code will no longer be needed when both sites update.
   if (tc_arcanum_ver < 400) {
-	var t3 = document.createTextNode("Filter");
-	var filter = document.createElement("Input");
-	filter.addEventListener("keyup", tc_lootfilter);
-	filter.id = "lootfilter";
-	filter.width = "50";
+    var t3 = document.createTextNode("Filter");
+    var filter = document.createElement("Input");
+    filter.addEventListener("keyup", tc_lootfilter);
+    filter.id = "lootfilter";
+    filter.width = "50";
 
-	sellall.parentNode.insertBefore(t3, null);
-	sellall.parentNode.insertBefore(filter, null);
+    sellall.parentNode.insertBefore(t3, null);
+    sellall.parentNode.insertBefore(filter, null);
   }
 
   if (tc_debug) console.log("Sell buttons added");
@@ -623,24 +623,24 @@ function tc_advsetup() {
   if (!tc_auto_adv) return;
   // makes clicking flee disable the auto adventure
   if (document.querySelector("div.game-main div.adventure div.explore .raid-btn")) {
-	document.querySelector("div.game-main div.adventure div.explore .raid-btn").addEventListener("click", function() {
-	  tc_auto_adventure = "";
-	})
+    document.querySelector("div.game-main div.adventure div.explore .raid-btn").addEventListener("click", function() {
+      tc_auto_adventure = "";
+    })
   }
 
   // Creates an auto button for every adventure.
   for (let qs of document.querySelectorAll("div.game-mid div.adventure div.locales div.locale span.separate:first-child")) {
-	if (qs.lastElementChild.innerText !== "Auto") {
-	  var seldungeon = document.createElement("button");
-	  seldungeon.appendChild(document.createTextNode("Auto"));
-	  seldungeon.addEventListener("click", function() {
-		tc_auto_adventure = qs.firstElementChild.firstElementChild.innerText;
-		tc_click_adv(tc_auto_adventure)
-	  });
-	  if (tc_auto_adventure == qs.children[0].children[0].innerText)
-		seldungeon.setAttribute("style", "color:#1B5E20");
-	  qs.appendChild(seldungeon);
-	}
+    if (qs.lastElementChild.innerText !== "Auto") {
+      var seldungeon = document.createElement("button");
+      seldungeon.appendChild(document.createTextNode("Auto"));
+      seldungeon.addEventListener("click", function() {
+        tc_auto_adventure = qs.firstElementChild.firstElementChild.innerText;
+        tc_click_adv(tc_auto_adventure)
+      });
+      if (tc_auto_adventure == qs.children[0].children[0].innerText)
+        seldungeon.setAttribute("style", "color:#1B5E20");
+      qs.appendChild(seldungeon);
+    }
   }
 }
 
@@ -648,17 +648,17 @@ function tc_get_auto_earn() {
   // Find which action we can do
   var act = tc_auto_earn_gold_override.trim();
   if (tc_auto_earn_gold_override.trim()) {
-	var a = tc_actions.get(act);
-	if (a && !a.disabled) {
-	  return act;
-	}
+    var a = tc_actions.get(act);
+    if (a && !a.disabled) {
+      return act;
+    }
   }
 
   for (let act in tc_actions_gold) {
-	var a = tc_actions.get(act);
-	if (a && !a.disabled) {
-	  return act;
-	}
+    var a = tc_actions.get(act);
+    if (a && !a.disabled) {
+      return act;
+    }
   }
 
   return undefined;
@@ -681,10 +681,10 @@ function tc_autoearngold() {
   // However if adventuring, this will mean we delay re-entering dungeon as resting never stops until we hit max gold.
   var min = max < 11 ? max - 2 : max - 5;
   if (amt >= min) {
-	for (let i = (amt - min) / stam; i > 0; i--) {
-	  if (tc_check_resource("gold", 1)) return; // not sure if this will get updated every click
-	  tc_click_action(action);
-	}
+    for (let i = (amt - min) / stam; i > 0; i--) {
+      if (tc_check_resource("gold", 1)) return; // not sure if this will get updated every click
+      tc_click_action(action);
+    }
   }
 }
 
@@ -707,56 +707,56 @@ function tc_autofocus_multi(amt) {
   var prev_btn;
   var prev_skill = "";
   for (let qs of document.querySelectorAll(".skills .skill")) {
-	var skill = qs.firstElementChild.firstElementChild.innerHTML;
-	var btn = qs.querySelectorAll("button")[0];
-	var text = btn.innerHTML.trim(); // Can be Unlock, Train, Stop
-	if (text == "Unlock" || btn.disabled) continue;
+    var skill = qs.firstElementChild.firstElementChild.innerHTML;
+    var btn = qs.querySelectorAll("button")[0];
+    var text = btn.innerHTML.trim(); // Can be Unlock, Train, Stop
+    if (text == "Unlock" || btn.disabled) continue;
 
-	// qs.firstElementChild.children[1].childNodes[0].data	- to get "Lvl: 3/4"
-	var lvl = parseInt(qs.firstElementChild.children[1].childNodes[0].data.substr(5).split('/')[0]);
-	if (lvl < lowest_lvl) {
-	  lowest_lvl = lvl;
-	  lowest_skill = skill;
-	  lowest_btn = btn;
-	}
+    // qs.firstElementChild.children[1].childNodes[0].data	- to get "Lvl: 3/4"
+    var lvl = parseInt(qs.firstElementChild.children[1].childNodes[0].data.substr(5).split('/')[0]);
+    if (lvl < lowest_lvl) {
+      lowest_lvl = lvl;
+      lowest_skill = skill;
+      lowest_btn = btn;
+    }
 
-	if (text == "Stop") { // it means we're training this skill
-	  if (skill != tc_skill_last || skill == tc_skill_saved) {
-		// the user changed to this skill or originally chose this one so learn it.
-		if (tc_debug) console.log("Learning " + skill + ", last = " + tc_skill_last + ", saved = " + tc_skill_saved);
-		tc_skill_saved = skill_to_learn = skill;
-		skill_btn = btn;
-	  } else if (skill == tc_skill_last) {
-		// If we don't end up learning this skill, we'll stop training it.
-		prev_btn = btn;
-		prev_skill = skill;
-	  }
-	}
+    if (text == "Stop") { // it means we're training this skill
+      if (skill != tc_skill_last || skill == tc_skill_saved) {
+        // the user changed to this skill or originally chose this one so learn it.
+        if (tc_debug) console.log("Learning " + skill + ", last = " + tc_skill_last + ", saved = " + tc_skill_saved);
+        tc_skill_saved = skill_to_learn = skill;
+        skill_btn = btn;
+      } else if (skill == tc_skill_last) {
+        // If we don't end up learning this skill, we'll stop training it.
+        prev_btn = btn;
+        prev_skill = skill;
+      }
+    }
   }
 
   if (skill_to_learn == "") {
-	if (lowest_skill == "") // nothing available to learn
-	  return;
+    if (lowest_skill == "") // nothing available to learn
+      return;
 
-	skill_to_learn = lowest_skill;
-	skill_btn = lowest_btn;
-	if (tc_debug) console.log("Learn lowest skill: " + skill_to_learn);
+    skill_to_learn = lowest_skill;
+    skill_btn = lowest_btn;
+    if (tc_debug) console.log("Learn lowest skill: " + skill_to_learn);
   }
 
   if (skill_btn.innerHTML.trim() == "Train")
-	skill_btn.click();
+    skill_btn.click();
   tc_skill_last = skill_to_learn;
   if (prev_skill != "" && prev_skill != skill_to_learn) {
-	prev_btn.click();
-	if (tc_debug) console.log("Switch off " + prev_skill);
+    prev_btn.click();
+    if (tc_debug) console.log("Switch off " + prev_skill);
   }
 
   // We're not going to be doing anything else while focussing (apart from autocast spells),
   // so just keep enough mana for the 3 mana spells.
   if (amt > 2.0) {
-	tc_focus.disabled = false; // in case button hasn't been updated yet
-	for (let i = 10 * (amt - 2); i > 0; i--) // 0.1 mana per focus
-	  tc_focus.click();
+    tc_focus.disabled = false; // in case button hasn't been updated yet
+    for (let i = 10 * (amt - 2); i > 0; i--) // 0.1 mana per focus
+      tc_focus.click();
   }
 
   // if tc_runners > 2 could try clicking other sorts of rest as well
@@ -784,27 +784,27 @@ async function tc_autofocus() {
   if (!tc_auto_focus) return;
 
   if (!tc_focus || !tc_rest)
-	for (let qs of document.querySelectorAll(".vitals div.separate button.btn-sm")) {
-	  if (!tc_focus && qs.innerHTML === "Focus")
-		tc_focus = qs;
-	  if (!tc_rest && qs.innerHTML.trim() === "rest")
-		tc_rest = qs;
-	}
+    for (let qs of document.querySelectorAll(".vitals div.separate button.btn-sm")) {
+      if (!tc_focus && qs.innerHTML === "Focus")
+        tc_focus = qs;
+      if (!tc_rest && qs.innerHTML.trim() === "rest")
+        tc_rest = qs;
+    }
   if (!tc_bars.get("mana")) return;
 
   var amt = tc_bars.get("mana")[0];
   var max = tc_bars.get("mana")[1];
 
   if (tc_gettab() != "skills" || !tc_auto_focus_aggressive) {
-	tc_skill_saved = tc_skill_last = "";
+    tc_skill_saved = tc_skill_last = "";
 
-	// 10 mana required for compile tome, 3 for Bind Codex, 1 for Scribe Scroll
-	var min = max < 15 ? max - 1 : 14;
-	if (amt >= min) {
-	  for (let i = 10 * (amt - min); i > 0; i--)
-		tc_focus.click();
-	}
-	return;
+    // 10 mana required for compile tome, 3 for Bind Codex, 1 for Scribe Scroll
+    var min = max < 15 ? max - 1 : 14;
+    if (amt >= min) {
+      for (let i = 10 * (amt - min); i > 0; i--)
+        tc_focus.click();
+    }
+    return;
   }
 
   // We're on the skills tab - try to: repeat {use up all mana with focusing, then rest to restore mana }
@@ -821,8 +821,8 @@ async function tc_autofocus() {
   var r = document.querySelectorAll(".running div button").length;
   if (r > tc_runners) tc_runners = r;
   if (tc_runners > 1) { // don't want to mess up the working single runner code
-	tc_autofocus_multi(amt) // available mana
-	return;
+    tc_autofocus_multi(amt) // available mana
+    return;
   }
 
   var lowest_lvl = 1000;
@@ -833,54 +833,54 @@ async function tc_autofocus() {
   var skill_element;
   var lowest_element;
   for (let qs of document.querySelectorAll(".skills .skill")) {
-	var skill = qs.firstElementChild.firstElementChild.innerHTML;
-	var btn = qs.querySelectorAll("button")[0];
-	var text = btn.innerHTML.trim(); // Can be Unlock, Train, Stop
-	if (text == "Unlock" || btn.disabled) continue;
+    var skill = qs.firstElementChild.firstElementChild.innerHTML;
+    var btn = qs.querySelectorAll("button")[0];
+    var text = btn.innerHTML.trim(); // Can be Unlock, Train, Stop
+    if (text == "Unlock" || btn.disabled) continue;
 
-	if (text == "Stop") { // it means we're training this skill
-	  skill_to_learn = skill;
-	  tc_skill_saved = skill;
-	  skill_btn = btn;
-	  skill_element = qs;
-	  if (tc_debug) console.log("Learning " + skill);
-	  break; // this takes precedence over anything else
-	}
+    if (text == "Stop") { // it means we're training this skill
+      skill_to_learn = skill;
+      tc_skill_saved = skill;
+      skill_btn = btn;
+      skill_element = qs;
+      if (tc_debug) console.log("Learning " + skill);
+      break; // this takes precedence over anything else
+    }
 
-	if (skill == tc_skill_saved) {
-	  // skill still available to be learnt - we'll end up learning this unless another is active
-	  skill_to_learn = skill;
-	  skill_btn = btn;
-	}
+    if (skill == tc_skill_saved) {
+      // skill still available to be learnt - we'll end up learning this unless another is active
+      skill_to_learn = skill;
+      skill_btn = btn;
+    }
 
-	// qs.firstElementChild.children[1].childNodes[0].data	- to get "Lvl: 3/4"
-	var lvl = parseInt(qs.firstElementChild.children[1].childNodes[0].data.substr(5).split('/')[0]);
-	if (lvl < lowest_lvl) {
-	  lowest_lvl = lvl;
-	  lowest_skill = skill;
-	  lowest_btn = btn;
-	  lowest_element = qs;
-	}
+    // qs.firstElementChild.children[1].childNodes[0].data	- to get "Lvl: 3/4"
+    var lvl = parseInt(qs.firstElementChild.children[1].childNodes[0].data.substr(5).split('/')[0]);
+    if (lvl < lowest_lvl) {
+      lowest_lvl = lvl;
+      lowest_skill = skill;
+      lowest_btn = btn;
+      lowest_element = qs;
+    }
   }
 
   if (skill_to_learn == "") {
-	if (lowest_skill == "") // nothing available to learn
-	  return;
+    if (lowest_skill == "") // nothing available to learn
+      return;
 
-	skill_to_learn = lowest_skill;
-	skill_btn = lowest_btn;
-	if (tc_debug) console.log("Learn lowest skill: " + skill_to_learn);
+    skill_to_learn = lowest_skill;
+    skill_btn = lowest_btn;
+    if (tc_debug) console.log("Learn lowest skill: " + skill_to_learn);
   }
 
   if (skill_btn.innerHTML.trim() == "Train")
-	skill_btn.click();
+    skill_btn.click();
 
   // We're not going to be doing anything else while focussing (apart from autocast spells),
   // so just keep enough mana for the 3 mana spells.
   if (amt > 2.0) {
-	tc_focus.disabled = false; // button probably hasn't been updated yet, but we can cheat
-	for (let i = 10 * (amt - 2); i > 0; i--) // 0.1 mana per focus
-	  tc_focus.click();
+    tc_focus.disabled = false; // button probably hasn't been updated yet, but we can cheat
+    for (let i = 10 * (amt - 2); i > 0; i--) // 0.1 mana per focus
+      tc_focus.click();
   }
 
   tc_rest.disabled = false;
@@ -894,17 +894,17 @@ function tc_autoheal() {
   if (!tc_auto_heal) return;
 
   if (tc_spells.has("sealing light iii")) {
-	if (tc_bars.get("hp")[1] - tc_bars.get("hp")[0] >= 100 && tc_bars.get("light")[1] >= 7)
-	  tc_cast_spell("sealing light iii")
-	return;
+    if (tc_bars.get("hp")[1] - tc_bars.get("hp")[0] >= 100 && tc_bars.get("light")[1] >= 7)
+      tc_cast_spell("sealing light iii")
+    return;
   }
 
   if (tc_spells.has("sealing light ii")) {
-	if (tc_bars.get("hp")[1] - tc_bars.get("hp")[0] >= 50 && tc_bars.get("light")[1] >= 5)
-	  tc_cast_spell("sealing light ii");
+    if (tc_bars.get("hp")[1] - tc_bars.get("hp")[0] >= 50 && tc_bars.get("light")[1] >= 5)
+      tc_cast_spell("sealing light ii");
   } else if (tc_spells.has("sealing light")) {
-	if (tc_bars.get("hp")[1] - tc_bars.get("hp")[0] >= 15 && tc_bars.get("light")[1] >= 5)
-	  tc_cast_spell("sealing light");
+    if (tc_bars.get("hp")[1] - tc_bars.get("hp")[0] >= 15 && tc_bars.get("light")[1] >= 5)
+      tc_cast_spell("sealing light");
   }
 }
 
@@ -912,9 +912,9 @@ function tc_autoheal() {
 function tc_colorpot() {
   if (tc_gettab() !== "equip") return;
   for (let item of document.querySelectorAll(".item-table .separate")) {
-	if (item.children[1].children[0].innerHTML == "Use") {
-	  item.children[0].style["background-color"] = "red";
-	}
+    if (item.children[1].children[0].innerHTML == "Use") {
+      item.children[0].style["background-color"] = "red";
+    }
   }
 }
 
@@ -928,31 +928,31 @@ function tc_menu_inv() {
 
   var materials = ["", "silk ", "cotton ", "stone ", "leather ", "wood ", "bone ", "bronze ", "iron ", "steel ", "quicksteel ", "ethereal ", "ebonwood ", "idrasil ", "mithril ", "adamant "]; // worst to best
   var armors = { // items ordered worst to best within groups
-	"back": ["cape", "robe", "cloak", "wings"],
-	"chest": ["jerkin", "padded armor", "chainmail", "plate mail"],
-	"feet": ["boots"],
-	"fingers": ["loop", "band", "ring"],
-	"hands": ["gloves"],
-	"head": ["hat", "cap", "helm", "conical helm"],
-	"neck": ["collar", "necklace", "pendant", "amulet"],
-	"shins": ["greaves"],
-	"waist": ["sash", "belt", "girdle", "cincture"]
+    "back": ["cape", "robe", "cloak", "wings"],
+    "chest": ["jerkin", "padded armor", "chainmail", "plate mail"],
+    "feet": ["boots"],
+    "fingers": ["loop", "band", "ring"],
+    "hands": ["gloves"],
+    "head": ["hat", "cap", "helm", "conical helm"],
+    "neck": ["collar", "necklace", "pendant", "amulet"],
+    "shins": ["greaves"],
+    "waist": ["sash", "belt", "girdle", "cincture"]
   };
   var weapons = ["club", "knife", "broomstick", "cane", "dagger", "staff", "axe", "mace", "shortsword", "spear", "battleaxe", "longsword", "warhammer"]; // roughly worst to best
 
   switch (tc_menu_inv_state) {
-	case 0:
-	  return;
-	case 1: // Switch to Equip
-	  tc_settab("equip");
-	  tc_menu_inv_state++;
-	  break;
-	case 2: // Grab lists of equipment, inventory and switch to adventure
-	  tc_menu_inv.equip = document.querySelectorAll(".inv-equip .equip .equip-slot"); // store in static var
-	  tc_menu_inv.inv = document.querySelectorAll(".item-table tr");
+    case 0:
+      return;
+    case 1: // Switch to Equip
+      tc_settab("equip");
+      tc_menu_inv_state++;
+      break;
+    case 2: // Grab lists of equipment, inventory and switch to adventure
+      tc_menu_inv.equip = document.querySelectorAll(".inv-equip .equip .equip-slot"); // store in static var
+      tc_menu_inv.inv = document.querySelectorAll(".item-table tr");
 
-	  // Build a map of item -> qty
-	  /*			for (let row of document.querySelectorAll(".adventure .raid-bottom .inv .item-table tr")) {
+      // Build a map of item -> qty
+      /*			for (let row of document.querySelectorAll(".adventure .raid-bottom .inv .item-table tr")) {
 			// table has 4 columns: name + 3 buttons: Equip, Take, Sell
 			if (row.children[3].children[0].innerText == "Sell") {
 				var item = row.children[0].innerText;
@@ -960,130 +960,130 @@ function tc_menu_inv() {
 				items.set(item, qty ? qty+1 : 1);
 			}
 		} */
-	  tc_settab("adventure");
-	  tc_menu_inv_state++;
-	  break;
-	case 3: // Grab list of loot and populate inventory screen
-	  var loots = document.querySelectorAll(".inv .item-table tr");
-	  var equips = tc_menu_inv.equip;
-	  var invs = tc_menu_inv.inv;
+      tc_settab("adventure");
+      tc_menu_inv_state++;
+      break;
+    case 3: // Grab list of loot and populate inventory screen
+      var loots = document.querySelectorAll(".inv .item-table tr");
+      var equips = tc_menu_inv.equip;
+      var invs = tc_menu_inv.inv;
 
-	  // equip is always going to be 11 (as it's body slots, not items), so not actually much use
-	  if (tc_debug) console.log("Loot items = " + loots.length + ", equip = " + equips.length + ", inv = " + invs.length);
+      // equip is always going to be 11 (as it's body slots, not items), so not actually much use
+      if (tc_debug) console.log("Loot items = " + loots.length + ", equip = " + equips.length + ", inv = " + invs.length);
 
-	  // Can use document.querySelectorAll(".menu-content")[0].clientWidth and clientHeight to get size of area to use for display.
-	  // Can also use getBoundingClientRect(). x y width height top left etc.  Not sure if this is useful.
-	  var size = document.querySelectorAll(".menu.game-mid")[0].getBoundingClientRect();
-	  var divstyle = document.getElementById("tc_inv_main").style;
+      // Can use document.querySelectorAll(".menu-content")[0].clientWidth and clientHeight to get size of area to use for display.
+      // Can also use getBoundingClientRect(). x y width height top left etc.  Not sure if this is useful.
+      var size = document.querySelectorAll(".menu.game-mid")[0].getBoundingClientRect();
+      var divstyle = document.getElementById("tc_inv_main").style;
 
-	  divstyle.background = window.getComputedStyle(document.body, null).getPropertyValue('background-color');
-	  divstyle.width = size.width + "px"
-	  divstyle.height = size.height + "px"
-	  divstyle.top = size.top + "px"
-	  divstyle.left = size.left + "px"
-	  divstyle.display = "block";
+      divstyle.background = window.getComputedStyle(document.body, null).getPropertyValue('background-color');
+      divstyle.width = size.width + "px"
+      divstyle.height = size.height + "px"
+      divstyle.top = size.top + "px"
+      divstyle.left = size.left + "px"
+      divstyle.display = "block";
 
-	  var html;
+      var html;
 
-	  // Loot
-	  html = "";
-	  var loot = new Map();
-	  for (let row of loots) {
-		// table has 4 columns: name + 3 buttons: Equip, Take, Sell, except for e.g. Nymie's Charm and Pumpkin Cider
-		var item = row.children[0].innerText;
-		if (row.children.length == 4 && row.children[1].children[0].innerText == "Equip") {
-		  var rows = loot.get(item);
-		  if (!rows)
-			loot.set(item, [row]);
-		  else {
-			rows.push(row);
-			loot.set(item, rows);
-		  }
-		} else {
-		  // Some sort of unusual item, add it to a list at the bottom
-		  html += item + "<br>";
-		}
-	  }
-	  if (html != "")
-		document.getElementById("tc_inv_loot").innerHTML = "<b>Miscellaneous loot:</b><br>" + html;
-	  if (tc_debug) console.log("Loot map items: " + loot.size);
-	  //		tc_loot = loot;	// remove
+      // Loot
+      html = "";
+      var loot = new Map();
+      for (let row of loots) {
+        // table has 4 columns: name + 3 buttons: Equip, Take, Sell, except for e.g. Nymie's Charm and Pumpkin Cider
+        var item = row.children[0].innerText;
+        if (row.children.length == 4 && row.children[1].children[0].innerText == "Equip") {
+          var rows = loot.get(item);
+          if (!rows)
+            loot.set(item, [row]);
+          else {
+            rows.push(row);
+            loot.set(item, rows);
+          }
+        } else {
+          // Some sort of unusual item, add it to a list at the bottom
+          html += item + "<br>";
+        }
+      }
+      if (html != "")
+        document.getElementById("tc_inv_loot").innerHTML = "<b>Miscellaneous loot:</b><br>" + html;
+      if (tc_debug) console.log("Loot map items: " + loot.size);
+      //		tc_loot = loot;	// remove
 
-	  // Equip
-	  // First generate empty tables for our loot.
-	  html = "";
-	  for (let row of equips) {
-		// <tr data-v-4284ca61="" class="equip-slot"><td data-v-4284ca61="" class="slot-name">neck:</td> <td data-v-4284ca61="" class="slot-item"><div data-v-4284ca61=""><span data-v-4284ca61="" class="item-name">amulet</span> <button data-v-4284ca61="">Unequip</button></div><div data-v-4284ca61=""><span data-v-4284ca61="" class="item-name">bone necklace</span> <button data-v-4284ca61="">Unequip</button></div></td></tr>
-		var bodypart = row.children[0].innerText;
-		bodypart = bodypart.slice(0, -1); // remove trailing ':'
-		html += "<span id='tc_inv_equip_" + bodypart + "'><b>" + bodypart + " : </b></span>";
-		html += "<br>";
-		if (bodypart == "left")
-		  continue; // don't separate left and right
-		else
-		  html += "<table style='border:none' id='tc_inv_" + bodypart + "'></table>";
-	  }
-	  document.getElementById("tc_inv_equip").innerHTML = html;
+      // Equip
+      // First generate empty tables for our loot.
+      html = "";
+      for (let row of equips) {
+        // <tr data-v-4284ca61="" class="equip-slot"><td data-v-4284ca61="" class="slot-name">neck:</td> <td data-v-4284ca61="" class="slot-item"><div data-v-4284ca61=""><span data-v-4284ca61="" class="item-name">amulet</span> <button data-v-4284ca61="">Unequip</button></div><div data-v-4284ca61=""><span data-v-4284ca61="" class="item-name">bone necklace</span> <button data-v-4284ca61="">Unequip</button></div></td></tr>
+        var bodypart = row.children[0].innerText;
+        bodypart = bodypart.slice(0, -1); // remove trailing ':'
+        html += "<span id='tc_inv_equip_" + bodypart + "'><b>" + bodypart + " : </b></span>";
+        html += "<br>";
+        if (bodypart == "left")
+          continue; // don't separate left and right
+        else
+          html += "<table style='border:none' id='tc_inv_" + bodypart + "'></table>";
+      }
+      document.getElementById("tc_inv_equip").innerHTML = html;
 
-	  // then populate loot into above tables
-	  for (let row of equips) {
-		// <tr data-v-4284ca61="" class="equip-slot"><td data-v-4284ca61="" class="slot-name">neck:</td> <td data-v-4284ca61="" class="slot-item"><div data-v-4284ca61=""><span data-v-4284ca61="" class="item-name">amulet</span> <button data-v-4284ca61="">Unequip</button></div><div data-v-4284ca61=""><span data-v-4284ca61="" class="item-name">bone necklace</span> <button data-v-4284ca61="">Unequip</button></div></td></tr>
-		var bodypart = row.children[0].innerText;
-		bodypart = bodypart.slice(0, -1); // remove trailing ':'
-		if (row.children[1].children.length > 0) {
-		  var e = document.getElementById("tc_inv_equip_" + bodypart);
-		  while (row.children[1].children.length > 0) {
-			//					html += ", " + row.children[1].children[i].children[0].innerText;
-			e.insertBefore(row.children[1].children[0], null); // this actually moves (rather than copies) the child out of row
-		  }
-		}
-		if (bodypart == "left")
-		  continue; // don't separate left and right
-		else if (bodypart == "right") {
-		  // do all weapons
-		  var table = document.getElementById("tc_inv_" + bodypart);
-		  for (let i = materials.length - 1; i >= 0; i--) {
-			for (let j = weapons.length - 1; j >= 0; j--) {
-			  var name = materials[i] + weapons[j];
-			  var item = loot.get(name);
-			  if (item) {
-				//							html += name + " x " + item.length + "<br>";
-				for (let k of item)
-				  table.insertBefore(k, null);
-			  }
-			}
-		  }
-		} else {
-		  // armor
-		  var table = document.getElementById("tc_inv_" + bodypart);
-		  for (let i = materials.length - 1; i >= 0; i--) {
-			var armor = armors[bodypart];
-			for (let j = armor.length - 1; j >= 0; j--) {
-			  var name = materials[i] + armor[j];
-			  var item = loot.get(name);
-			  if (item) {
-				//							html += name + " x " + item.length + "<br>";
-				for (let k of item)
-				  table.insertBefore(k, null);
-			  }
-			}
-		  }
-		}
-	  }
+      // then populate loot into above tables
+      for (let row of equips) {
+        // <tr data-v-4284ca61="" class="equip-slot"><td data-v-4284ca61="" class="slot-name">neck:</td> <td data-v-4284ca61="" class="slot-item"><div data-v-4284ca61=""><span data-v-4284ca61="" class="item-name">amulet</span> <button data-v-4284ca61="">Unequip</button></div><div data-v-4284ca61=""><span data-v-4284ca61="" class="item-name">bone necklace</span> <button data-v-4284ca61="">Unequip</button></div></td></tr>
+        var bodypart = row.children[0].innerText;
+        bodypart = bodypart.slice(0, -1); // remove trailing ':'
+        if (row.children[1].children.length > 0) {
+          var e = document.getElementById("tc_inv_equip_" + bodypart);
+          while (row.children[1].children.length > 0) {
+            //					html += ", " + row.children[1].children[i].children[0].innerText;
+            e.insertBefore(row.children[1].children[0], null); // this actually moves (rather than copies) the child out of row
+          }
+        }
+        if (bodypart == "left")
+          continue; // don't separate left and right
+        else if (bodypart == "right") {
+          // do all weapons
+          var table = document.getElementById("tc_inv_" + bodypart);
+          for (let i = materials.length - 1; i >= 0; i--) {
+            for (let j = weapons.length - 1; j >= 0; j--) {
+              var name = materials[i] + weapons[j];
+              var item = loot.get(name);
+              if (item) {
+                //							html += name + " x " + item.length + "<br>";
+                for (let k of item)
+                  table.insertBefore(k, null);
+              }
+            }
+          }
+        } else {
+          // armor
+          var table = document.getElementById("tc_inv_" + bodypart);
+          for (let i = materials.length - 1; i >= 0; i--) {
+            var armor = armors[bodypart];
+            for (let j = armor.length - 1; j >= 0; j--) {
+              var name = materials[i] + armor[j];
+              var item = loot.get(name);
+              if (item) {
+                //							html += name + " x " + item.length + "<br>";
+                for (let k of item)
+                  table.insertBefore(k, null);
+              }
+            }
+          }
+        }
+      }
 
-	  // Inv - don't really do anything with this
-	  html = "";
-	  html = "<b>Inventory:</b><br>";
-	  for (let row of invs) {
-		html += row.children[0].innerText + "<br>";
-	  }
-	  document.getElementById("tc_inv_inv").innerHTML = html;
+      // Inv - don't really do anything with this
+      html = "";
+      html = "<b>Inventory:</b><br>";
+      for (let row of invs) {
+        html += row.children[0].innerText + "<br>";
+      }
+      document.getElementById("tc_inv_inv").innerHTML = html;
 
-	  tc_menu_inv_state++;
-	  break;
-	case 4:
-	  // Sit back and wait for something to happen
-	  break;
+      tc_menu_inv_state++;
+      break;
+    case 4:
+      // Sit back and wait for something to happen
+      break;
   }
 }
 
@@ -1137,11 +1137,11 @@ function tc_load_settings() {
   // All data stored in localStorage is of type string - need to convert it back.
   // Also allow default values for first time running script.
   function get_val(name, default_val, type) {
-	var val = localStorage.getItem(name);
-	if (val === null) return default_val;
-	if (type === "bool") return val === "true";
-	if (type === "int") return parseInt(val);
-	return val;
+    var val = localStorage.getItem(name);
+    if (val === null) return default_val;
+    if (type === "bool") return val === "true";
+    if (type === "int") return parseInt(val);
+    return val;
   }
 
   // Set default values here to be "noob-friendly"
@@ -1282,8 +1282,8 @@ function tc_config_setup() {
   // Try to add the config button to the quickslot bar, but if the user hasn't created any shortcuts yet fall back to quickbar
   var config = document.querySelectorAll(".quickslot");
   if (config.length == 0) {
-	config = document.querySelectorAll(".quickbar");
-	if (config.length == 0) return; // nothing to add it to
+    config = document.querySelectorAll(".quickbar");
+    if (config.length == 0) return; // nothing to add it to
   }
   config = config[0];
 
@@ -1369,9 +1369,9 @@ function tc_configure_for_version() {
 
   // The default values should always be for the latest version, adjust them here if working with an old version.
   if (tc_arcanum_ver <= 323) {
-	tc_gems["nature gem"] = "imbue lifegem";
-	tc_gems["earth gem"] = "imbue stone";
-	tc_gems["blood gem"] = "coagulate gem";
+    tc_gems["nature gem"] = "imbue lifegem";
+    tc_gems["earth gem"] = "imbue stone";
+    tc_gems["blood gem"] = "coagulate gem";
   }
 }
 
@@ -1389,9 +1389,9 @@ var tc_timer_autocast;
 function tc_start_timers() // can be restarted by save_settings()
 {
   if (tc_timer_ac != undefined)
-	window.clearInterval(tc_timer_ac);
+    window.clearInterval(tc_timer_ac);
   if (tc_timer_autocast != undefined)
-	window.clearInterval(tc_timer_autocast);
+    window.clearInterval(tc_timer_autocast);
 
   tc_config_setup();
   tc_populate_spells();
@@ -1402,28 +1402,28 @@ function tc_start_timers() // can be restarted by save_settings()
   tc_populate_running();
 
   tc_timer_ac = window.setInterval(function() {
-	tc_config_setup();
-	tc_populate_spells();
-	tc_populate_resources();
-	tc_populate_actions();
-	tc_populate_bars();
-	tc_populate_adventures();
-	tc_populate_running();
-	tc_automate();
-	tc_autofocus();
-	tc_autoheal();
-	tc_autoadv();
-	tc_sellsetup();
-	tc_advsetup();
-	tc_autoearngold();
-	tc_menu_inv(); // handle populating Inventory tab
-	tc_colorpot() // potion coloring
+    tc_config_setup();
+    tc_populate_spells();
+    tc_populate_resources();
+    tc_populate_actions();
+    tc_populate_bars();
+    tc_populate_adventures();
+    tc_populate_running();
+    tc_automate();
+    tc_autofocus();
+    tc_autoheal();
+    tc_autoadv();
+    tc_sellsetup();
+    tc_advsetup();
+    tc_autoearngold();
+    tc_menu_inv(); // handle populating Inventory tab
+    tc_colorpot() // potion coloring
   }, tc_auto_speed);
 
   tc_timer_autocast = window.setInterval(function() {
-	iko_autocast();
-	tc_autocast();
-	tc_time_offset++; // must be done here so it works even if tc_autocast disabled
+    iko_autocast();
+    tc_autocast();
+    tc_time_offset++; // must be done here so it works even if tc_autocast disabled
   }, tc_auto_speed_spells);
 }
 
